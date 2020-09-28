@@ -15,7 +15,7 @@ files = [
 
 setup(
     name='ansible-modules-kafka',
-    version='0.1.0',
+    version='0.11.0',
     description='Ansible Modules for Kafka',
     long_description='Ansible Modules for Kafka',
     long_description_content_type='text/x-rst',
