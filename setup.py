@@ -13,13 +13,11 @@ files = [
     "ansible/modules/kafka",
 ]
 
-long_description = open('README.rst', 'r').read()
-
 setup(
     name='ansible-modules-kafka',
     version='0.1.0',
     description='Ansible Modules for Kafka',
-    long_description=long_description,
+    long_description='Ansible Modules for Kafka',
     long_description_content_type='text/x-rst',
     author='Michael Zaccari',
     author_email='michael.zaccari@gmail.com',
