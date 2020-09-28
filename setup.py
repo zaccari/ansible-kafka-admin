@@ -10,7 +10,7 @@ py_files = [
     "ansible/module_utils/ssl_utils",
 ]
 files = [
-    "ansible/modules/kafka_lib",
+    "ansible/modules/kafka",
 ]
 
 long_description = open('README.rst', 'r').read()

@@ -2,6 +2,9 @@
 # from ansible.module_utils.kafka import hashivault_argspec
 # from ansible.module_utils.hashivault import hashivault_client
 # from ansible.module_utils.hashivault import hashivault_init
+
+from ansible.module_utils.kafka import kafka_argspec
+from ansible.module_utils.kafka import kafka_init
 from ansible.module_utils.kafka import kafkawrapper
 
 ANSIBLE_METADATA = {'status': ['stableinterface'],
@@ -26,6 +29,11 @@ EXAMPLES = '''
 
 
 def main():
+    argspec = kafka_argspec()
+    module = kafka_init(argspec)
+    result = kafka_create_topic(module.params)
+    return module.exit_json(**result)
+
     # argspec = hashivault_argspec()
     # module = hashivault_init(argspec)
     # result = kafka_create_topic(module.params)

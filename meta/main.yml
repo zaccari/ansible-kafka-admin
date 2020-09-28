@@ -15,6 +15,6 @@ galaxy_info:
       versions:
         - all
   galaxy_tags:
-    - "kafka_lib"
+    - "kafka"
 
 dependencies: []
