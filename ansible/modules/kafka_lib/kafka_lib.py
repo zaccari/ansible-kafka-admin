@@ -324,6 +324,7 @@ EXAMPLES = '''
 
 '''
 
+
 class ACLResourceType(IntEnum):
     """An enumerated type of config resources"""
 
@@ -353,6 +354,7 @@ class ACLResourceType(IntEnum):
             return ACLResourceType.TRANSACTIONAL_ID
         else:
             raise ValueError("%r is not a valid ACLResourceType" % name)
+
 
 class ACLPatternType(IntEnum):
     """An enumerated type of pattern type for ACLs"""
@@ -698,7 +700,7 @@ def main():
                         certfile=zookeeper_ssl_files['certfile']['path'],
                         ca=zookeeper_ssl_files['cafile']['path'],
                         verify_certs=zookeeper_ssl_check_hostname
-                        )
+                    )
                 except Exception:
                     e = get_exception()
                     module.fail_json(
@@ -756,10 +758,10 @@ def main():
                 else:
                     # 0 or "default" (-1)
                     module.warn(
-                      "Current values of 'partitions' (%s) and "
-                      "'replica_factor' (%s) does not let this lib to "
-                      "perform any action related to partitions and "
-                      "replication. SKIPPING." % (partitions, replica_factor)
+                        "Current values of 'partitions' (%s) and "
+                        "'replica_factor' (%s) does not let this lib to "
+                        "perform any action related to partitions and "
+                        "replication. SKIPPING." % (partitions, replica_factor)
                     )
             else:
                 # topic is absent
@@ -785,17 +787,17 @@ def main():
 
         if acl_resource_type.lower() == 'broker':
             module.deprecate(
-              'Usage of "broker" is deprecated, please use "cluster" instead'
+                'Usage of "broker" is deprecated, please use "cluster" instead'
             )
 
         acl_resource = ACLResource(
-                resource_type=ACLResourceType.from_name(acl_resource_type),
-                operation=ACLOperation.from_name(acl_operation),
-                permission_type=ACLPermissionType.from_name(acl_permission),
-                pattern_type=ACLPatternType.from_name(acl_pattern_type),
-                name=name,
-                principal=acl_principal,
-                host=acl_host)
+            resource_type=ACLResourceType.from_name(acl_resource_type),
+            operation=ACLOperation.from_name(acl_operation),
+            permission_type=ACLPermissionType.from_name(acl_permission),
+            pattern_type=ACLPatternType.from_name(acl_pattern_type),
+            name=name,
+            principal=acl_principal,
+            host=acl_host)
 
         acl_resource_found = manager.describe_acls(acl_resource, api_version)
 

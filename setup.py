@@ -6,6 +6,7 @@ py_files = [
     "ansible/module_utils/acl_permission_type",
     "ansible/module_utils/kafka_consumer_lag",
     "ansible/module_utils/kafka_manager",
+    "ansible/module_utils/kafka",
     "ansible/module_utils/ssl_utils",
 ]
 files = [
