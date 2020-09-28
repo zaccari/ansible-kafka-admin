@@ -1,32 +1,20 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-"""
-Ansible module for topic configuration management
-"""
+
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
-
-# import module snippets
 import os
 from pkg_resources import parse_version
-
-# Init logging
 import logging
 import sys
-
 from kafka.errors import IllegalArgumentError
-
-# enum in stdlib as of py3.4
 try:
     from enum import IntEnum  # pylint: disable=import-error
 except ImportError:
     # vendored backport module
     from kafka.vendor.enum34 import IntEnum
 
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.pycompat24 import get_exception
-
 from ansible.module_utils.kafka_manager import KafkaManager
 from ansible.module_utils.ssl_utils import generate_ssl_object
 from ansible.module_utils.ssl_utils import generate_ssl_context
@@ -39,9 +27,7 @@ log = logging.getLogger('kafka')
 log.addHandler(logging.StreamHandler(sys.stdout))
 log.setLevel(logging.INFO)
 
-ANSIBLE_METADATA = {'metadata_version': '1.0'}
-
-
+ANSIBLE_METADATA = {'metadata_version': '1.1', 'version': '0.1.0'}
 DOCUMENTATION = '''
 ---
 module: kafka_lib
@@ -338,7 +324,6 @@ EXAMPLES = '''
 
 '''
 
-
 class ACLResourceType(IntEnum):
     """An enumerated type of config resources"""
 
@@ -368,7 +353,6 @@ class ACLResourceType(IntEnum):
             return ACLResourceType.TRANSACTIONAL_ID
         else:
             raise ValueError("%r is not a valid ACLResourceType" % name)
-
 
 class ACLPatternType(IntEnum):
     """An enumerated type of pattern type for ACLs"""
