@@ -440,10 +440,6 @@ def merge_dicts(*dict_args):
     return result
 
 
-def kafka_lib():
-    print("hello")
-
-
 def main():
     """
     Module usage
