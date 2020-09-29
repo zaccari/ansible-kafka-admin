@@ -767,6 +767,7 @@ def main():
                         "perform any action related to partitions and "
                         "replication. SKIPPING." % (partitions, replica_factor)
                     )
+
             else:
                 # topic is absent
                 if not module.check_mode:

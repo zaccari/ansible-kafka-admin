@@ -14,13 +14,18 @@ def kafkawrapper(function):
 
 def kafka_argspec():
     argument_spec = dict(
-        name=dict(required=True, type='str'),
-        bootstrap_servers=dict(required=True, type='list', elements='str'),
-        zookeeper=dict(type='str', required=False),
-        api_version=dict(required=False, default='2.0.0', type='str'),
+        name=dict(type='str', required=True),
+        api_version=dict(type='str', required=False, default='2.0.0'),
         partitions=dict(type='int', required=False, default=1),
         replica_factor=dict(type='int', required=False, default=1),
         state=dict(choices=['present', 'absent'], default='present'),
+        options=dict(required=False, type='dict', default=None),
+        bootstrap_servers=dict(required=False, type='str', default=os.environ.get(
+            'KAFKA_BROKERS', '127.0.0.1:9092')),
+        zookeeper=dict(type='str', required=False, default=os.environ.get(
+            'ZOOKEEPER_SERVERS', '127.0.0.1:2181')),
+        zookeeper_sleep_time=dict(type='int', required=False, default=5),
+        zookeeper_max_retries=dict(type='int', required=False, default=5),
     )
     return argument_spec
 
@@ -46,21 +51,12 @@ def kafka_client(module):
     )
 
     try:
-        ssl_context = None
         client = KafkaManager(
             module=module,
             bootstrap_servers=module.params['bootstrap_servers'],
-            request_timeout_ms=5000,
             api_version=api_version,
         )
-        # ssl_context=params['ssl_context'],
-        # sasl_mechanism=sasl_mechanism,
-        # sasl_plain_username=sasl_plain_username,
-        # sasl_plain_password=sasl_plain_password,
-        # sasl_kerberos_service_name=sasl_kerberos_service_name)
     except Exception:
-        # e = get_exception()
-        # print('Error while initializing Kafka client : %s ' % str(e))
         e = get_exception()
         module.fail_json(
             msg='Error while initializing Kafka client : %s ' % str(e)
