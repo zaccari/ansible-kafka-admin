@@ -27,7 +27,7 @@ log = logging.getLogger('kafka')
 log.addHandler(logging.StreamHandler(sys.stdout))
 log.setLevel(logging.INFO)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1', 'version': '0.1.0'}
+ANSIBLE_METADATA = {'metadata_version': '1.0'}
 DOCUMENTATION = '''
 ---
 module: kafka_lib
