@@ -603,7 +603,7 @@ class KafkaManager:
                     msg='Can\'t update \'%s\' topic partition from %s to %s :'
                     'only increase is possible.' % (
                         topic_name, total_partitions, partitions
-                        )
+                    )
                 )
 
         return need_update

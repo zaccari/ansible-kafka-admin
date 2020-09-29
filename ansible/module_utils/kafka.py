@@ -1,5 +1,7 @@
 import os
 from ansible.module_utils.basic import AnsibleModule, env_fallback
+from ansible.module_utils.pycompat24 import get_exception
+from ansible.module_utils.kafka_manager import KafkaManager
 
 
 def kafkawrapper(function):
@@ -12,34 +14,13 @@ def kafkawrapper(function):
 
 def kafka_argspec():
     argument_spec = dict(
-        url=dict(required=False, default=os.environ.get(
-            'VAULT_ADDR', ''), type='str'),
-        ca_cert=dict(required=False, default=os.environ.get(
-            'VAULT_CACERT', ''), type='str'),
-        ca_path=dict(required=False, default=os.environ.get(
-            'VAULT_CAPATH', ''), type='str'),
-        client_cert=dict(required=False, default=os.environ.get(
-            'VAULT_CLIENT_CERT', ''), type='str'),
-        client_key=dict(required=False, default=os.environ.get(
-            'VAULT_CLIENT_KEY', ''), type='str'),
-        verify=dict(required=False, default=(
-            not os.environ.get('VAULT_SKIP_VERIFY', '')), type='bool'),
-        authtype=dict(required=False, default=os.environ.get(
-            'VAULT_AUTHTYPE', 'token'), type='str'),
-        login_mount_point=dict(required=False, default=os.environ.get(
-            'VAULT_LOGIN_MOUNT_POINT', None), type='str'),
-        username=dict(required=False, default=os.environ.get(
-            'VAULT_USER', ''), type='str'),
-        password=dict(required=False, fallback=(
-            env_fallback, ['VAULT_PASSWORD']), type='str', no_log=True),
-        role_id=dict(required=False, fallback=(env_fallback, [
-                     'VAULT_ROLE_ID']), type='str', no_log=True),
-        secret_id=dict(required=False, fallback=(
-            env_fallback, ['VAULT_SECRET_ID']), type='str', no_log=True),
-        aws_header=dict(required=False, fallback=(
-            env_fallback, ['VAULT_AWS_HEADER']), type='str', no_log=True),
-        namespace=dict(required=False, default=os.environ.get(
-            'VAULT_NAMESPACE', None), type='str')
+        name=dict(required=True, type='str'),
+        bootstrap_servers=dict(required=True, type='list', elements='str'),
+        zookeeper=dict(type='str', required=False),
+        api_version=dict(required=False, default='2.0.0', type='str'),
+        partitions=dict(type='int', required=False, default=1),
+        replica_factor=dict(type='int', required=False, default=1),
+        state=dict(choices=['present', 'absent'], default='present'),
     )
     return argument_spec
 
@@ -56,3 +37,33 @@ def kafka_init(argument_spec, supports_check_mode=False, required_if=None, requi
     module.no_log_values.discard(True)
     module.no_log_values.discard(False)
     return module
+
+
+def kafka_client(module):
+    client = None
+    api_version = tuple(
+        int(p) for p in module.params['api_version'].strip(".").split(".")
+    )
+
+    try:
+        ssl_context = None
+        client = KafkaManager(
+            module=module,
+            bootstrap_servers=module.params['bootstrap_servers'],
+            request_timeout_ms=5000,
+            api_version=api_version,
+        )
+        # ssl_context=params['ssl_context'],
+        # sasl_mechanism=sasl_mechanism,
+        # sasl_plain_username=sasl_plain_username,
+        # sasl_plain_password=sasl_plain_password,
+        # sasl_kerberos_service_name=sasl_kerberos_service_name)
+    except Exception:
+        # e = get_exception()
+        # print('Error while initializing Kafka client : %s ' % str(e))
+        e = get_exception()
+        module.fail_json(
+            msg='Error while initializing Kafka client : %s ' % str(e)
+        )
+
+    return client
