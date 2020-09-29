@@ -136,6 +136,7 @@ def kafka_topic(module):
                     module.params['name'],
                     module.params['partitions'],
                     module.params['replica_factor'],
+                    config_entries=module.params['options'].items(),
                 )
             changed = True
             msg += 'successfully created.'
